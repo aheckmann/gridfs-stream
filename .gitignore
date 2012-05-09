@@ -1,0 +1,4 @@
+*.swo
+*.swp
+*.swn
+node_modules/
