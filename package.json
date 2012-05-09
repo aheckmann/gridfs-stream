@@ -1,0 +1,19 @@
+{
+  "author": "Aaron Heckmann <aaron.heckmann+github@gmail.com>",
+  "name": "gridfs-stream",
+  "description": "Writeable/Readable Nodejs compatible GridFS streams",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "make test"
+  },
+  "dependencies": {
+    "mongodb": "1.0.0"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
