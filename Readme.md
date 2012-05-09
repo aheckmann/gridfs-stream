@@ -17,7 +17,13 @@ readstream.pipe(response);
 
 Created streams are compatible with other Node streams so piping anywhere is easy.
 
-## Use:
+## install
+
+```
+npm install gridfs-stream
+```
+
+## use
 
 The `gridfs-stream` module exports a function that accepts a [mongodb-native](https://github.com/mongodb/node-mongodb-native/) db. The db must already be opened before passing it in.
 
