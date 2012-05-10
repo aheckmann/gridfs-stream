@@ -117,7 +117,14 @@ describe('test', function(){
       // used in readable stream test
       id = ws.id;
 
+      var progress = 0;
+
+      ws.on('progress', function (size) {
+        progress = size;
+      });
+
       ws.on('close', function () {
+        assert(progress > 0);
         done();
       });
 
