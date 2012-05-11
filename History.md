@@ -1,4 +1,10 @@
 
+0.0.4 / 05-11-2012
+==================
+
+  * fixed; do not flush until open
+  * updated; mongodb driver
+
 0.0.3 / 05-10-2012
 ==================
 
