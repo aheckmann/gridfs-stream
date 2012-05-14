@@ -1,4 +1,3 @@
-
 # gridfs-stream
 
 Easily stream files to and from MongoDB [GridFS](http://www.mongodb.org/display/DOCS/GridFS).
@@ -53,4 +52,4 @@ readstream.pipe(response);
 
 Any options are passed to the internally created [GridStore](http://mongodb.github.com/node-mongodb-native/api-generated/gridstore.html).
 
-[LICENCE](https://github.com/aheckmann/gridfs-stream/blob/master/LICENSE)
+[LICENSE](https://github.com/aheckmann/gridfs-stream/blob/master/LICENSE)
