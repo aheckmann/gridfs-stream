@@ -3,7 +3,9 @@
 Easily stream files to and from MongoDB [GridFS](http://www.mongodb.org/display/DOCS/GridFS).
 
 ```js
-var gfs = require('gridfs-stream')(db);
+var mongo = require('mongodb');
+var Grid = require('gridfs-stream')(mongo);
+var gfs = Grid(db);
 
 // streaming to gridfs
 var writestream = gfs.createWriteStream('filename');
@@ -24,10 +26,17 @@ npm install gridfs-stream
 
 ## use
 
-The `gridfs-stream` module exports a function that accepts a [mongodb-native](https://github.com/mongodb/node-mongodb-native/) db. The db must already be opened before passing it in.
+The `gridfs-stream` module exports a function that accepts the [mongodb-native](https://github.com/mongodb/node-mongodb-native/) driver you are using.
 
 ```js
-var gfs = require('gridfs-stream')(db);
+var mongo = require('mongodb');
+var Grid = require('gridfs-stream')(mongo);
+```
+
+Executing this function returns a constructor that accepts a [mongodb-native](https://github.com/mongodb/node-mongodb-native/) db. The db must already be opened before calling `createWriteStream` or `createReadStream`.
+
+```js
+var gfs = Grid(db);
 ```
 
 Now we're ready to start streaming.
