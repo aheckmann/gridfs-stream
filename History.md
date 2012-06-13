@@ -1,4 +1,9 @@
 
+0.1.0 / 06-13-2012
+==================
+
+  * fixed; node-mongodb-native compatibility issues (#1)
+
 0.0.5 / 05-18-2012
 ==================
 
