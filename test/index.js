@@ -3,8 +3,8 @@
 var assert = require('assert')
   , Stream = require('stream')
   , fs = require('fs')
-  , Grid = require('../')
   , mongo = require('mongodb')
+  , Grid = require('../')(mongo)
   , fixturesDir = __dirname + '/fixtures/'
   , imgReadPath = __dirname + '/fixtures/mongo.png'
   , txtReadPath = __dirname + '/fixtures/text.txt'

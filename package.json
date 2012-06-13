@@ -7,10 +7,10 @@
     "test": "make test"
   },
   "dependencies": {
-    "mongodb": "1.0.1"
   },
   "devDependencies": {
-    "mocha": "*"
+    "mocha": "*",
+    "mongodb": "1.0.2"
   },
   "optionalDependencies": {},
   "engines": {
