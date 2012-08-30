@@ -3,6 +3,11 @@
   "name": "gridfs-stream",
   "description": "Writable/Readable Nodejs compatible GridFS streams",
   "version": "0.1.0",
+  "keywords": [
+    "mongodb",
+    "mongoose",
+    "gridfs"
+  ],
   "scripts": {
     "test": "make test"
   },
