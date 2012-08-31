@@ -2,7 +2,7 @@
   "author": "Aaron Heckmann <aaron.heckmann+github@gmail.com>",
   "name": "gridfs-stream",
   "description": "Writable/Readable Nodejs compatible GridFS streams",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "keywords": [
     "mongodb",
     "mongoose",
