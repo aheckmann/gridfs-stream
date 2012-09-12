@@ -346,6 +346,17 @@ describe('test', function(){
 
       rs.pipe(writeStream);
     });
+
+    it('should allow removing files', function(done){
+      g.remove(id, function (err) {
+        if (err) return done(err);
+        g.files.findOne({ _id: id }, function (err, doc) {
+          if (err) return done(err);
+          assert.ok(!doc);
+          done();
+        })
+      });
+    })
   });
 
   after(function (done) {
