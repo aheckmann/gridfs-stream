@@ -43,6 +43,29 @@ describe('test', function(){
         new Grid(null, 3)
       }, /missing db argument/);
     })
+    describe('files', function(){
+      it('returns a collection', function(){
+        var g = new Grid(db, mongo);
+        assert(g.files instanceof mongo.Collection);
+      })
+    })
+    describe('collection()', function(){
+      it('changes the files collection', function(){
+        var g = new Grid(db, mongo);
+        assert.equal('function', typeof g.collection);
+        assert(g.collection() instanceof mongo.Collection);
+        assert.equal(g.collection(), g.files);
+        var old = g.files;
+        g.collection('changed')
+        assert(g.collection() instanceof mongo.Collection);
+        assert.ok(g.collection() == g.files);
+        assert.ok(g.collection() != old);
+        g.collection()
+        assert(g.collection() instanceof mongo.Collection);
+        assert.equal(g.collection(), g.files);
+        assert.equal(g.collection().collectionName, old.collectionName);
+      })
+    })
   });
 
   describe('createWriteStream', function(){
