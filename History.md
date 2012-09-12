@@ -1,4 +1,10 @@
 
+0.2.0 / 2012-09-11
+==================
+
+  * update driver to 1.1.7
+  * auto cast to ObjectId when possible
+
 0.1.1 / 2012-08-31
 ==================
 
