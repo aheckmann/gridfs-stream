@@ -62,8 +62,8 @@ describe('test', function(){
     it('should have an id', function(){
       assert(ws.id)
     })
-    it('id should be a string', function(){
-      assert('string' == typeof ws.id);
+    it('id should be an ObjectId', function(){
+      assert(ws.id instanceof mongo.BSONPure.ObjectID);
     });
     it('should have a name', function(){
       assert(ws.name == 'logo.png')
@@ -131,17 +131,18 @@ describe('test', function(){
       var pipe = readStream.pipe(ws);
     });
     it('should pipe more data to an existing GridFS file', function(done){
-      function pipe (cb) {
+      function pipe (id, cb) {
+        if (!cb) cb = id, id = null;
         var readStream = fs.createReadStream(txtReadPath);
-        var ws = g.createWriteStream('mytext.txt', { mode: 'w+' });
+        var ws = g.createWriteStream(id || 'mytext.txt', { mode: 'w+' });
         ws.on('close', function () {
           cb(ws.id);
         });
         readStream.pipe(ws);
       }
 
-      pipe(function () {
-        pipe(function (id) {
+      pipe(function (id) {
+        pipe(id, function (id) {
           // read the file out. it should consist of two copies of original
           mongo.GridStore.read(db, id, function (err, txt) {
             if (err) return done(err);
@@ -181,8 +182,8 @@ describe('test', function(){
     it('should have a name', function(){
       assert(rs.name == 'logo.png')
     })
-    it('should have an id', function(){
-      assert.equal(rs.id, 'logo.png')
+    it('should not have an id', function(){
+      assert.equal(rs.id, null)
     })
     describe('options', function(){
       it('should have no defaults', function(){
@@ -272,6 +273,7 @@ describe('test', function(){
       var file = fixturesDir + 'byid.png';
       var rs = g.createReadStream(id);
       var writeStream = fs.createWriteStream(file);
+      assert(rs.id instanceof mongo.BSONPure.ObjectID);
       assert(rs.id == String(id))
 
       var opened = false;
