@@ -4,7 +4,7 @@ var assert = require('assert')
   , Stream = require('stream')
   , fs = require('fs')
   , mongo = require('mongodb')
-  , Grid = require('../')(mongo)
+  , Grid = require('../')
   , fixturesDir = __dirname + '/fixtures/'
   , imgReadPath = __dirname + '/fixtures/mongo.png'
   , txtReadPath = __dirname + '/fixtures/text.txt'
@@ -25,18 +25,29 @@ describe('test', function(){
       assert('function' == typeof Grid);
     });
     it('should create instances without the new keyword', function () {
-      var x = Grid();
+      var x = Grid(2,3);
       assert(x instanceof Grid);
     });
-    it('should store the argument passed as the db', function () {
-      var x = new Grid(4);
+    it('should store the arguments', function () {
+      var x = new Grid(4, 5);
       assert.equal(x.db, 4);
+      assert.equal(x.mongo, 5);
     });
+    it('should require mongo argument', function(){
+      assert.throws(function () {
+        new Grid(3)
+      }, /missing mongo argument/);
+    })
+    it('should require db argument', function(){
+      assert.throws(function () {
+        new Grid(null, 3)
+      }, /missing db argument/);
+    })
   });
 
   describe('createWriteStream', function(){
     it('should be a function', function () {
-      var x = Grid();
+      var x = Grid(1, mongo);
       assert('function' == typeof x.createWriteStream);
     });
   })
@@ -46,6 +57,7 @@ describe('test', function(){
       , ws
 
     before(function(){
+      Grid.mongo = mongo;
       g = Grid(db);
       ws = g.createWriteStream('logo.png');
     });
@@ -156,7 +168,7 @@ describe('test', function(){
 
   describe('createReadStream', function(){
     it('should be a function', function () {
-      var x = Grid();
+      var x = Grid(1);
       assert('function' == typeof x.createReadStream);
     });
   });
