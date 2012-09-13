@@ -67,6 +67,40 @@ readstream.pipe(response);
 
 Any options are passed to the internally created [GridStore](http://mongodb.github.com/node-mongodb-native/api-generated/gridstore.html).
 
+## removing files
+
+Files can be removed by passing their `id` to the `remove()` method.
+
+```js
+gfs.remove(id, function (err) {
+  if (err) return handleError(err);
+  console.log('success');
+});
+
+```
+
+## accessing file metadata
+
+All file meta-data (file name, upload date, contentType, etc) are stored in a special mongodb collection separate from the actual file data. This collection can be queried directly:
+
+```js
+  var gfs = Grid(conn.db);
+  gfs.files.find({ filename: 'myImage.png' }).toArray(function (err, files) {
+    if (err) ...
+    console.log(files);
+  })
+```
+
+You may optionally change the root gridfs collection as well:
+
+```js
+  var gfs = Grid(conn.db);
+  gfs.collection('myroot').find({ filename: 'myImage.png' }).toArray(function (err, files) {
+    if (err) ...
+    console.log(files);
+  })
+```
+
 ## using with mongoose
 
 ```js
@@ -94,28 +128,6 @@ conn.once('open', function () {
 
   // all set!
 })
-```
-
-## accessing file metadata
-
-All file meta-data (file name, upload date, contentType, etc) are stored in a special mongodb collection separate from the actual file data. This collection can be queried directly:
-
-```js
-  var gfs = Grid(conn.db);
-  gfs.files.find({ filename: 'myImage.png' }).toArray(function (err, files) {
-    if (err) ...
-    console.log(files);
-  })
-```
-
-You may optionally change the root gridfs collection as well:
-
-```js
-  var gfs = Grid(conn.db);
-  gfs.collection('myroot').find({ filename: 'myImage.png' }).toArray(function (err, files) {
-    if (err) ...
-    console.log(files);
-  })
 ```
 
 [LICENSE](https://github.com/aheckmann/gridfs-stream/blob/master/LICENSE)
