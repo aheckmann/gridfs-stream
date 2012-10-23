@@ -165,6 +165,32 @@ describe('test', function(){
 
       var pipe = readStream.pipe(ws);
     });
+    it('should provide Error and File object on WriteStream close event', function(done){
+      var readStream = fs.createReadStream(imgReadPath, { bufferSize: 1024 });
+      var ws = g.createWriteStream('closeEvent.png', {
+        mode: 'w',
+        content_type: "image/png"
+      });
+      // used in readable stream test
+      id = ws.id;
+
+      var progress = 0;
+
+      ws.on('progress', function (size) {
+        progress = size;
+      });
+
+      ws.on('close', function (err, file) {
+        assert(err === null);
+        assert(file.filename === 'closeEvent.png')
+        assert(file.contentType === 'image/png')
+        assert(progress > 0);
+        done();
+      });
+      var pipe = readStream.pipe(ws);
+    });
+
+
     it('should pipe more data to an existing GridFS file', function(done){
       function pipe (id, cb) {
         if (!cb) cb = id, id = null;
