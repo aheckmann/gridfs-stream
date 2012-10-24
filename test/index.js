@@ -180,8 +180,7 @@ describe('test', function(){
         progress = size;
       });
 
-      ws.on('close', function (err, file) {
-        assert(err === null);
+      ws.on('close', function (file) {
         assert(file.filename === 'closeEvent.png')
         assert(file.contentType === 'image/png')
         assert(progress > 0);
