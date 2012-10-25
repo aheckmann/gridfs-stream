@@ -56,6 +56,15 @@ var writestream = gfs.createWriteStream('filename' [, options]);
 fs.createReadStream('/some/path').pipe(writestream);
 ```
 
+The created File object is passed in the writeStreams `close` event.
+
+```js
+writestream.on('close', function (file) {
+  // do something with `file`
+  console.log(file.filename);
+});
+```
+
 ## createReadStream
 
 To stream data out of GridFS we call `createReadStream` passing a filename and any options.
