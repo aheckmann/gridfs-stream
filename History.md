@@ -1,4 +1,10 @@
 
+0.3.2 / 2012-10-25
+==================
+
+  * add; passing File object when emmiting close event [diogogmt](https://github.com/diogogmt)
+  * update readme
+
 0.3.1 / 2012-09-12
 ==================
 
