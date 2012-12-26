@@ -16,7 +16,7 @@ describe('test', function(){
   var id;
   before(function (done) {
     server = new mongo.Server('localhost', 27017);
-    db = new mongo.Db('gridstream_test', server);
+    db = new mongo.Db('gridstream_test', server, {w:1});
     db.open(done)
   });
 
