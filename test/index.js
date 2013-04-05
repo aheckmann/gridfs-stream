@@ -104,8 +104,8 @@ describe('test', function(){
       assert(ws.name == 'logo.png')
     })
     describe('options', function(){
-      it('should have one key', function(){
-        assert(Object.keys(ws.options).length === 1);
+      it('should have two keys', function(){
+        assert(Object.keys(ws.options).length === 2);
       });
       it('limit should be Infinity', function(){
         assert(ws.options.limit === Infinity)
@@ -189,7 +189,6 @@ describe('test', function(){
       var pipe = readStream.pipe(ws);
     });
 
-
     it('should pipe more data to an existing GridFS file', function(done){
       function pipe (id, cb) {
         if (!cb) cb = id, id = null;
@@ -211,6 +210,11 @@ describe('test', function(){
           });
         });
       })
+    });
+
+    it('should be able to store a 12-letter file name', function() {
+      var rs = g.createWriteStream({ filename: '12345678.png' });
+      assert.equal(rs.name,'12345678.png');
     });
   });
 
