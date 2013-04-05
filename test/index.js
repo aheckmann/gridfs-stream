@@ -382,6 +382,18 @@ describe('test', function(){
         })
       });
     })
+
+    it('should be possible to pause a stream after constructing it', function (done) {
+      rs = g.createReadStream('logo.png');
+      rs.pause();
+      setTimeout(function () {
+        rs.resume();
+      }, 1000);
+
+      rs.on('data', function (data) {
+        done();
+      });
+    });
   });
 
   after(function (done) {
