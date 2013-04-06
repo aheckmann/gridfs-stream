@@ -8,11 +8,15 @@ var Grid = require('gridfs-stream');
 var gfs = Grid(db, mongo);
 
 // streaming to gridfs
-var writestream = gfs.createWriteStream('filename');
+var writestream = gfs.createWriteStream({
+    filename: 'my_file.txt'
+});
 fs.createReadStream('/some/path').pipe(writestream);
 
 // streaming from gridfs
-var readstream = gfs.createReadStream('filename');
+var readstream = gfs.createReadStream({
+  filename: 'my_file.txt'
+});
 readstream.pipe(response);
 ```
 
@@ -49,11 +53,29 @@ Now we're ready to start streaming.
 
 ## createWriteStream
 
-To stream data to GridFS we call `createWriteStream` passing a filename and any options.
+To stream data to GridFS we call `createWriteStream` passing any options.
 
 ```js
-var writestream = gfs.createWriteStream('filename' [, options]);
+var writestream = gfs.createWriteStream([options]);
 fs.createReadStream('/some/path').pipe(writestream);
+```
+
+Options may contain zero or more of the following options, for more information see [GridStore](http://mongodb.github.com/node-mongodb-native/api-generated/gridstore.html):
+```js
+{
+    _id: '50e03d29edfdc00d34000001', // a MongoDb ObjectId
+    filename: 'my_file.txt', // a filename
+    mode: 'w', // w, w+ or r, see [GridStore](http://mongodb.github.com/node-mongodb-native/api-generated/gridstore.html)
+
+    //any other options from the GridStore may be passed to, e.g.:
+
+    chunk_size: 1024,
+    content_type: 'plain/text',
+    root: 'my_collection',
+    metadata: {
+        ...
+    }
+}
 ```
 
 The created File object is passed in the writeStreams `close` event.
@@ -67,25 +89,26 @@ writestream.on('close', function (file) {
 
 ## createReadStream
 
-To stream data out of GridFS we call `createReadStream` passing a filename and any options.
+To stream data out of GridFS we call `createReadStream` passing any options, at least an `_id` or `filename`.
 
 ```js
-var readstream = gfs.createReadStream('filename' [, options]);
+var readstream = gfs.createReadStream(options);
 readstream.pipe(response);
 ```
 
-Any options are passed to the internally created [GridStore](http://mongodb.github.com/node-mongodb-native/api-generated/gridstore.html).
+See the options of `createWriteStream` for more information.
 
 ## removing files
 
-Files can be removed by passing their `id` to the `remove()` method.
+Files can be removed by passing options (at least an `_id` or `filename`) to the `remove()` method.
 
 ```js
-gfs.remove(id, function (err) {
+gfs.remove(options, function (err) {
   if (err) return handleError(err);
   console.log('success');
 });
 
+See the options of `createWriteStream` for more information.
 ```
 
 ## accessing file metadata
