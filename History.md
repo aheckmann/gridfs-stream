@@ -1,4 +1,16 @@
 
+0.4.0 / 2013-04-07
+==================
+
+  * changed; ReadStream/WriteStream api #4 #6 #7 #10 #11 #15 [Reggino](https://github.com/Reggino)
+  * fixed; parameter ambiguity (objectId / filename) for GridReadStream, GridWriteStream, grid#remove() #11 [Reggino](https://github.com/Reggino)
+  * fixed; Gridfs should be able to store 12 lettered file names Issue #11 [Reggino](https://github.com/Reggino)
+  * fixed; ReadStream pause() / resume() issue #12 #13 [Reggino](https://github.com/Reggino)
+  * fixed; #4
+  * fixed; #6
+  * fixed; #7
+  * fixed; #10
+
 0.3.2 / 2012-10-25
 ==================
 
