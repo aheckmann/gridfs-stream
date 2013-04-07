@@ -82,7 +82,7 @@ describe('test', function(){
     before(function(){
       Grid.mongo = mongo;
       g = Grid(db);
-      ws = g.createWriteStream('logo.png');
+      ws = g.createWriteStream({ filename: 'logo.png' });
     });
 
     it('should be an instance of Stream', function(){
@@ -147,7 +147,7 @@ describe('test', function(){
     });
     it('should provide piping from a readableStream into GridFS', function(done){
       var readStream = fs.createReadStream(imgReadPath, { bufferSize: 1024 });
-      var ws = g.createWriteStream('logo.png');
+      var ws = g.createWriteStream({ filename: 'logo.png'});
 
       // used in readable stream test
       id = ws.id;
@@ -167,8 +167,9 @@ describe('test', function(){
     });
     it('should provide Error and File object on WriteStream close event', function(done){
       var readStream = fs.createReadStream(imgReadPath, { bufferSize: 1024 });
-      var ws = g.createWriteStream('closeEvent.png', {
+      var ws = g.createWriteStream({
         mode: 'w',
+        filename: 'closeEvent.png',
         content_type: "image/png"
       });
       // used in readable stream test
@@ -193,7 +194,9 @@ describe('test', function(){
       function pipe (id, cb) {
         if (!cb) cb = id, id = null;
         var readStream = fs.createReadStream(txtReadPath);
-        var ws = g.createWriteStream(id || 'mytext.txt', { mode: 'w+' });
+        var ws = g.createWriteStream({
+          _id: id,
+          mode: 'w+' });
         ws.on('close', function () {
           cb(ws.id);
         });
@@ -231,7 +234,9 @@ describe('test', function(){
 
     before(function(){
       g = Grid(db);
-      rs = g.createReadStream('logo.png');
+      rs = g.createReadStream({
+        filename: 'logo.png'
+      });
     });
 
     it('should create an instance of Stream', function(){
@@ -251,7 +256,7 @@ describe('test', function(){
     })
     describe('options', function(){
       it('should have no defaults', function(){
-        assert(Object.keys(rs.options).length === 0);
+        assert(Object.keys(g.createReadStream({}).options).length === 0);
       });
     })
     it('mode should default to r', function(){
@@ -294,7 +299,9 @@ describe('test', function(){
     });
     it('should provide piping to a writable stream by name', function(done){
       var file = fixturesDir + 'byname.png';
-      var rs = g.createReadStream('logo.png');
+      var rs = g.createReadStream({
+        filename: 'logo.png'
+      });
       var writeStream = fs.createWriteStream(file);
 
       var opened = false;
@@ -335,7 +342,9 @@ describe('test', function(){
 
     it('should provide piping to a writable stream by id', function(done){
       var file = fixturesDir + 'byid.png';
-      var rs = g.createReadStream(id);
+      var rs = g.createReadStream({
+        _id: id
+      });
       var writeStream = fs.createWriteStream(file);
       assert(rs.id instanceof mongo.BSONPure.ObjectID);
       assert(rs.id == String(id))
@@ -377,7 +386,7 @@ describe('test', function(){
     });
 
     it('should allow removing files', function(done){
-      g.remove(id, function (err) {
+      g.remove({ _id: id }, function (err) {
         if (err) return done(err);
         g.files.findOne({ _id: id }, function (err, doc) {
           if (err) return done(err);
@@ -388,7 +397,7 @@ describe('test', function(){
     })
 
     it('should be possible to pause a stream after constructing it', function (done) {
-      rs = g.createReadStream('logo.png');
+      rs = g.createReadStream({ filename: 'logo.png' });
       rs.pause();
       setTimeout(function () {
         rs.resume();
