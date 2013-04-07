@@ -1,3 +1,9 @@
+0.4.0 / 2013-04-07
+==================
+
+  * fixed; parameter ambiguity (objectId / filename) for GridReadStream, GridWriteStream, grid#remove() (#11)
+  * fixed; ReadStream pause() / resume() issue (#12)
+  * update readme
 
 0.3.2 / 2012-10-25
 ==================
