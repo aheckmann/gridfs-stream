@@ -47,7 +47,7 @@ db.open(function (err) {
 })
 ```
 
-The `gridfs-stream` module exports a constructor that accepts an open [mongodb-native](https://github.com/mongodb/node-mongodb-native/) db and the [mongodb-native](https://github.com/mongodb/node-mongodb-native/) driver you are using. _The db must already be opened before calling `createWriteStream` or `createReadStream`._
+The `gridfs-stream` module exports a constructor that accepts an open [mongodb-native](https://github.com/mongodb/node-mongodb-native/) db and the [mongodb-native](https://github.com/mongodb/node-mongodb-native/) driver you are using. _The db must already be opened before calling `createWriteStream` or `createReadStream`.
 
 Now we're ready to start streaming.
 
@@ -67,10 +67,10 @@ Options may contain zero or more of the following options, for more information 
     filename: 'my_file.txt', // a filename
     mode: 'w', // w, w+ or r, see [GridStore](http://mongodb.github.com/node-mongodb-native/api-generated/gridstore.html)
 
-    //any other options from the GridStore may be passed to, e.g.:
+    //any other options from the GridStore may be passed too, e.g.:
 
-    chunk_size: 1024,
-    content_type: 'plain/text',
+    chunk_size: 1024, 
+    content_type: 'plain/text', 
     root: 'my_collection',
     metadata: {
         ...
@@ -107,9 +107,9 @@ gfs.remove(options, function (err) {
   if (err) return handleError(err);
   console.log('success');
 });
+```
 
 See the options of `createWriteStream` for more information.
-```
 
 ## accessing file metadata
 
