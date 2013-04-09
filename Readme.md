@@ -20,6 +20,14 @@ var readstream = gfs.createReadStream({
 readstream.pipe(response);
 ```
 
+Alternatively you could read the file using an _id. This is ofter a better option, since filenames don't have to be unique within the collection. e.g.
+
+```js
+var readstream = gfs.createReadStream({
+  _id: '50e03d29edfdc00d34000001'
+});
+```
+
 Created streams are compatible with other Node streams so piping anywhere is easy.
 
 ## install
@@ -65,12 +73,12 @@ Options may contain zero or more of the following options, for more information 
 {
     _id: '50e03d29edfdc00d34000001', // a MongoDb ObjectId
     filename: 'my_file.txt', // a filename
-    mode: 'w', // w, w+ or r, see [GridStore](http://mongodb.github.com/node-mongodb-native/api-generated/gridstore.html)
+    mode: 'w', // default value: w+, possible options: w, w+ or r, see [GridStore](http://mongodb.github.com/node-mongodb-native/api-generated/gridstore.html)
 
     //any other options from the GridStore may be passed too, e.g.:
 
     chunk_size: 1024, 
-    content_type: 'plain/text', 
+    content_type: 'plain/text', // For content_type to work properly, set "mode"-option to "w" too!
     root: 'my_collection',
     metadata: {
         ...
