@@ -20,7 +20,7 @@ var readstream = gfs.createReadStream({
 readstream.pipe(response);
 ```
 
-Alternatively you could read the file using an _id. This is ofter a better option, since filenames don't have to be unique within the collection. e.g.
+Alternatively you could read the file using an _id. This is often a better option, since filenames don't have to be unique within the collection. e.g.
 
 ```js
 var readstream = gfs.createReadStream({
