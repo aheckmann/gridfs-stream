@@ -17,6 +17,13 @@ fs.createReadStream('/some/path').pipe(writestream);
 var readstream = gfs.createReadStream({
   filename: 'my_file.txt'
 });
+
+//error handling, e.g. file does not exist
+readstream.on('error', function (err) {
+  console.log('An error occored!', err);
+  throw err;
+});
+
 readstream.pipe(response);
 ```
 
@@ -26,6 +33,7 @@ Alternatively you could read the file using an _id. This is often a better optio
 var readstream = gfs.createReadStream({
   _id: '50e03d29edfdc00d34000001'
 });
+
 ```
 
 Created streams are compatible with other Node streams so piping anywhere is easy.
