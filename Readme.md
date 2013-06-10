@@ -20,7 +20,7 @@ var readstream = gfs.createReadStream({
 
 //error handling, e.g. file does not exist
 readstream.on('error', function (err) {
-  console.log('An error occored!', err);
+  console.log('An error occurred!', err);
   throw err;
 });
 
