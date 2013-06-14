@@ -52,7 +52,7 @@ var Grid = require('gridfs-stream');
 
 // create or use an existing mongodb-native db instance.
 // for this example we'll just create one:
-var db = new mongo.Db('yourDatabaseName', new Server("127.0.0.1", 27017));
+var db = new mongo.Db('yourDatabaseName', new mongo.Server("127.0.0.1", 27017));
 
 // make sure the db instance is open before passing into `Grid`
 db.open(function (err) {
