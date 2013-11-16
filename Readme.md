@@ -85,7 +85,7 @@ Options may contain zero or more of the following options, for more information 
 
     //any other options from the GridStore may be passed too, e.g.:
 
-    chunk_size: 1024, 
+    chunkSize: 1024, 
     content_type: 'plain/text', // For content_type to work properly, set "mode"-option to "w" too!
     root: 'my_collection',
     metadata: {
