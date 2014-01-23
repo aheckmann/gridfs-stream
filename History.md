@@ -1,4 +1,10 @@
 
+0.4.1 / 2014-01-22
+==================
+
+ * fixed; Changing chunk_size to chunkSize #27 from [khous](https://github.com/khous)
+ * fixed; Server is undefined, should be mongo.Server instead #23 from [sahat](https://github.com/sahat)
+
 0.4.0 / 2013-04-07
 ==================
 
