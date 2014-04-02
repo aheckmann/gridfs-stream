@@ -5,6 +5,9 @@ Easily stream files to and from MongoDB [GridFS](http://www.mongodb.org/display/
 ```js
 var mongo = require('mongodb');
 var Grid = require('gridfs-stream');
+
+// create or use an existing mongodb-native db instance
+var db = new mongo.Db('yourDatabaseName', new mongo.Server("127.0.0.1", 27017));
 var gfs = Grid(db, mongo);
 
 // streaming to gridfs
