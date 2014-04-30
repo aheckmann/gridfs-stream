@@ -117,6 +117,17 @@ readstream.pipe(response);
 
 See the options of `createWriteStream` for more information.
 
+To get partial data with `createReadStream`, use `range` option. e.g.
+```js
+var readstream = gfs.createReadStream({
+  _id: '50e03d29edfdc00d34000001',
+  range: {
+    startPos: 100,
+    endPos: 500000
+  }
+});
+```
+
 ## removing files
 
 Files can be removed by passing options (at least an `_id` or `filename`) to the `remove()` method.
