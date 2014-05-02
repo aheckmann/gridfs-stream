@@ -434,6 +434,22 @@ describe('test', function(){
       rs.pipe(writeStream);
     });
 
+    it('should allow checking for existence of files', function(done){
+        g.exist({ _id: id }, function (err, result) {
+            if (err) return done(err);
+            assert.ok(result);
+            done();
+        });
+    })
+
+    it('should allow checking for non existence of files', function(done){
+        g.exist({ filename: 'does-not-exists.1234' }, function (err, result) {
+            if (err) return done(err);
+            assert.ok(!result);
+            done();
+        });
+    })
+
     it('should allow removing files', function(done){
       g.remove({ _id: id }, function (err) {
         if (err) return done(err);
@@ -445,7 +461,7 @@ describe('test', function(){
       });
     })
 
-    it('should be possible to pause a stream after constructing it', function (done) {
+      it('should be possible to pause a stream after constructing it', function (done) {
       rs = g.createReadStream({ filename: 'logo.png' });
       rs.pause();
       setTimeout(function () {

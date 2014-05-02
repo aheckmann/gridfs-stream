@@ -141,6 +141,19 @@ gfs.remove(options, function (err) {
 
 See the options of `createWriteStream` for more information.
 
+## check if file exists
+
+Check if a file exist by passing options (at least an `_id` or `filename`) to the `exist()` method.
+
+```js
+gfs.exist(options, function (err, found) {
+  if (err) return handleError(err);
+  found ? console.log('File exists') : console.log('File does not exist');
+});
+```
+
+See the options of `createWriteStream` for more information.
+
 ## accessing file metadata
 
 All file meta-data (file name, upload date, contentType, etc) are stored in a special mongodb collection separate from the actual file data. This collection can be queried directly:
