@@ -1,4 +1,11 @@
 
+0.5.0 / 2014-05-03
+==================
+
+ * added; range read support #37 from [xissy](https://github.com/xissy)
+ * added; support for file existance queries #32 [jaalfaro](https://github.com/jaalfaro)
+ * docs; show that Mongo Db needs to be initalized #33 [marcusoftnet](https://github.com/marcusoftnet)
+
 0.4.1 / 2014-01-22
 ==================
 
