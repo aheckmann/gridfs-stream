@@ -385,24 +385,72 @@ describe('test', function(){
       rs.pipe(writeStream);
     });
 
-      it('should allow checking for existence of files', function(done){
-          g.exist({ _id: id }, function (err, result) {
-              if (err) return done(err);
-              assert.ok(result);
-              done();
-          });
-      })
+    it('should provide piping to a writable stream with a range by id', function(done){
+      var file = fixturesDir + 'byid.png';
+      var rs = g.createReadStream({
+        _id: id,
+        range: {
+          startPos: 1000,
+          endPos: 10000
+        }
+      });
+      var writeStream = fs.createWriteStream(file);
+      assert(rs.id instanceof mongo.BSONPure.ObjectID);
+      assert(rs.id == String(id))
 
-      it('should allow checking for non existence of files', function(done){
-          g.exist({ filename: 'does-not-exists.1234' }, function (err, result) {
-              if (err) return done(err);
-              assert.ok(!result);
-              done();
-          });
-      })
+      var opened = false;
+      var ended = false;
 
+      rs.on('open', function () {
+        opened = true;
+      });
 
-      it('should allow removing files', function(done){
+      rs.on('error', function (err) {
+        throw err;
+      });
+
+      rs.on('end', function () {
+        ended = true;
+      });
+
+      writeStream.on('close', function () {
+         //check they are identical
+        assert(opened);
+        assert(ended);
+
+        var buf1 = fs.readFileSync(imgReadPath);
+        var buf2 = fs.readFileSync(file);
+
+        assert(buf2.length === rs.options.range.endPos - rs.options.range.startPos + 1);
+
+        for (var i = 0, len = buf2.length; i < len; ++i) {
+          assert(buf1[i + rs.options.range.startPos] == buf2[i]);
+        }
+
+        fs.unlinkSync(file);
+        done();
+      });
+
+      rs.pipe(writeStream);
+    });
+
+    it('should allow checking for existence of files', function(done){
+        g.exist({ _id: id }, function (err, result) {
+            if (err) return done(err);
+            assert.ok(result);
+            done();
+        });
+    })
+
+    it('should allow checking for non existence of files', function(done){
+        g.exist({ filename: 'does-not-exists.1234' }, function (err, result) {
+            if (err) return done(err);
+            assert.ok(!result);
+            done();
+        });
+    })
+
+    it('should allow removing files', function(done){
       g.remove({ _id: id }, function (err) {
         if (err) return done(err);
         g.files.findOne({ _id: id }, function (err, doc) {
