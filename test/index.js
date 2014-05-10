@@ -216,8 +216,41 @@ describe('test', function(){
     });
 
     it('should be able to store a 12-letter file name', function() {
-      var rs = g.createWriteStream({ filename: '12345678.png' });
-      assert.equal(rs.name,'12345678.png');
+      var ws = g.createWriteStream({ filename: '12345678.png' });
+      assert.equal(ws.name,'12345678.png');
+    });
+
+    it("shouldn't clobber filename when rewriting to an existing file by id", function(done){
+      var ws = g.createWriteStream({
+        mode: 'w',
+        filename: 'filename.txt',
+        content_type: 'text/plain'
+      });
+      var rewrite_id = ws.id;
+      ws.write("Some text\n");
+      ws.end();
+
+      ws.on('close', function () {
+        // Rewrite the same file by _id
+        var ws2 = g.createWriteStream({
+          _id: rewrite_id,
+          mode: 'w'
+        });
+        ws2.write("Some more text\n");
+        ws2.end();
+
+        ws2.on('close', function () {
+          g.exist({ _id: rewrite_id }, function (err, result) {
+            if (err) return done(err);
+            assert.ok(result);
+            g.exist({ filename: "filename.txt" }, function (err, result) {
+              if (err) return done(err);
+              assert.ok(result);
+              done();
+            });
+          });
+        });
+      });
     });
   });
 
