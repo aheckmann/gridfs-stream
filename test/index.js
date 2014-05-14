@@ -8,6 +8,7 @@ var assert = require('assert')
   , fixturesDir = __dirname + '/fixtures/'
   , imgReadPath = __dirname + '/fixtures/mongo.png'
   , txtReadPath = __dirname + '/fixtures/text.txt'
+  , emptyReadPath = __dirname + '/fixtures/emptydoc.txt'
   , server
   , db
 
@@ -251,6 +252,22 @@ describe('test', function(){
           });
         });
       });
+    });
+
+    it('should be able to store an empty file', function(done){
+      var readStream = fs.createReadStream(emptyReadPath);
+      var ws = g.createWriteStream({
+        mode: 'w',
+        filename: 'closeEvent.txt',
+        content_type: "text/plain"
+      });
+
+      ws.on('close', function (file) {
+        assert(file.filename === 'closeEvent.txt')
+        assert(file.contentType === 'text/plain')
+        done();
+      });
+      var pipe = readStream.pipe(ws);
     });
   });
 
