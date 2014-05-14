@@ -1,4 +1,10 @@
 
+0.5.1 / 2014-05-14
+==================
+
+ * fixed; support 0-byte files #39 [PNPhillips](https://github.com/PNPhillips)
+ * fixed; do not overwrite the filename with empty string #38 [vsivsi](https://github.com/vsivsi)
+
 0.5.0 / 2014-05-03
 ==================
 
