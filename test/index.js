@@ -269,6 +269,18 @@ describe('test', function(){
       });
       var pipe = readStream.pipe(ws);
     });
+
+    it('should create files with an _id of arbitrary type', function(done){
+      var readStream = fs.createReadStream(imgReadPath, { bufferSize: 1024 });
+      var ws = g.createWriteStream({ _id: 'an_arbitrary_id', filename: 'file.img'});
+
+      ws.on('close', function (file) {
+        assert(file._id === 'an_arbitrary_id');
+        done();
+      });
+
+      var pipe = readStream.pipe(ws);
+    });
   });
 
   describe('createReadStream', function(){
@@ -482,6 +494,16 @@ describe('test', function(){
       });
 
       rs.pipe(writeStream);
+    });
+
+    it('should read files with an _id of arbitrary type', function(done){
+      var rs = g.createReadStream({ _id: 'an_arbitrary_id'});
+
+      rs.on('open', function () {
+        assert(rs.id === 'an_arbitrary_id');
+        done();
+      });
+
     });
 
     it('should allow checking for existence of files', function(done){
