@@ -5,6 +5,9 @@ var assert = require('assert')
   , fs = require('fs')
   , mongo = require('mongodb')
   , Grid = require('../')
+  , checksum = require('checksum')
+  , request = require('request')
+  , http = require('http')
   , fixturesDir = __dirname + '/fixtures/'
   , imgReadPath = __dirname + '/fixtures/mongo.png'
   , txtReadPath = __dirname + '/fixtures/text.txt'
@@ -545,6 +548,29 @@ describe('test', function(){
         rs.destroy();
       });
     });
+
+    //issue #46
+    it('should be able to pipe to http responses and have consequent results', function (done) {
+    var server = http.createServer(function (request, response) {
+      g.createReadStream({filename: 'logo.png'}).pipe(response);
+    });
+    server.listen(8000, function () {
+      var doneCounter = 0;
+      var totalCounter = 100;
+      var checksums = [];
+      for (var i = totalCounter; i-- > 0;) {
+      request('http://localhost:8000', function (error, response, body) {
+        checksums.push(checksum(body));
+          if (++doneCounter == totalCounter) {
+            assert(checksums.filter(function (value, index, self) {
+              return self.indexOf(value) === index;
+            }).length === 2);
+            done();
+          }
+        });
+      }
+     });
+    })
   });
 
   after(function (done) {
