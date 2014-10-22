@@ -562,6 +562,7 @@ describe('test', function(){
       request('http://localhost:8000', function (error, response, body) {
         checksums.push(checksum(body));
           if (++doneCounter == totalCounter) {
+            //unique and count the checksums. Only one checksum should exist!
             assert(checksums.filter(function (value, index, self) {
               return self.indexOf(value) === index;
             }).length === 1);
