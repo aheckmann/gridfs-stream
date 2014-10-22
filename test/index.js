@@ -564,7 +564,7 @@ describe('test', function(){
           if (++doneCounter == totalCounter) {
             assert(checksums.filter(function (value, index, self) {
               return self.indexOf(value) === index;
-            }).length === 2);
+            }).length === 1);
             done();
           }
         });
