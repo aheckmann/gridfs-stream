@@ -524,7 +524,7 @@ describe('test', function(){
         assert.ok(result);
         done();
       });
-    })
+    });
 
     it('should allow checking for non existence of files', function(done){
       g.exist({ filename: 'does-not-exists.1234' }, function (err, result) {
@@ -532,7 +532,22 @@ describe('test', function(){
         assert.ok(!result);
         done();
       });
-    })
+    });
+
+    // See #51
+    it('should allow checking for existence of files in an alternate root collection', function(done){
+      var alternateFileOptions = {filename: 'alternateLogo.png', root: 'alternate' };
+      var readStream = g.createReadStream({filename: 'logo.png'});
+      var writeStream = g.createWriteStream(alternateFileOptions);
+      readStream.pipe(writeStream);
+      writeStream.on('close', function () {
+        g.exist(alternateFileOptions, function (err, result) {
+          if (err) return done(err);
+          assert.ok(result);
+          done();
+        });
+      });
+    });
 
     it('should allow removing files', function(done){
       g.remove({ _id: id }, function (err) {
