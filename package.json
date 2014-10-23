@@ -16,8 +16,7 @@
   "devDependencies": {
     "mocha": "*",
     "mongodb": "1.4.3",
-    "checksum": "~0.1.1",
-    "request": "~2.45.0"
+    "checksum": "~0.1.1"
   },
   "optionalDependencies": {},
   "engines": {

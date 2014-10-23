@@ -5,13 +5,14 @@ var assert = require('assert')
   , fs = require('fs')
   , mongo = require('mongodb')
   , Grid = require('../')
+  , crypto = require('crypto')
   , checksum = require('checksum')
-  , request = require('request')
-  , http = require('http')
+  , tmpDir = __dirname + '/tmp/'
   , fixturesDir = __dirname + '/fixtures/'
-  , imgReadPath = __dirname + '/fixtures/mongo.png'
-  , txtReadPath = __dirname + '/fixtures/text.txt'
-  , emptyReadPath = __dirname + '/fixtures/emptydoc.txt'
+  , imgReadPath = fixturesDir + 'mongo.png'
+  , txtReadPath =fixturesDir + 'text.txt'
+  , emptyReadPath = fixturesDir + 'emptydoc.txt'
+  , largeBlobPath = tmpDir + '1mbBlob'
   , server
   , db
 
@@ -21,7 +22,15 @@ describe('test', function(){
   before(function (done) {
     server = new mongo.Server('localhost', 27017);
     db = new mongo.Db('gridstream_test', server, {w:1});
-    db.open(done)
+    if (!fs.existsSync(tmpDir)) {
+      fs.mkdirSync(tmpDir);
+    }
+    fs.writeFile(largeBlobPath, crypto.randomBytes(1024*1024), function (err) {
+      if (err) {
+        done(err);
+      }
+      db.open(done)
+    });
   });
 
   describe('Grid', function () {
@@ -550,33 +559,52 @@ describe('test', function(){
     });
 
     //issue #46
-    it('should be able to pipe to http responses and have consequent results', function (done) {
-    var server = http.createServer(function (request, response) {
-      g.createReadStream({filename: 'logo.png'}).pipe(response);
-    });
-    server.listen(8000, function () {
+    it('should be able handle multiple streams with multiple chunks', function (done) {
       var doneCounter = 0;
       var totalCounter = 100;
       var checksums = [];
-      for (var i = totalCounter; i-- > 0;) {
-      request('http://localhost:8000', function (error, response, body) {
-        checksums.push(checksum(body));
-          if (++doneCounter == totalCounter) {
-            //unique and count the checksums. Only one checksum should exist!
-            assert(checksums.filter(function (value, index, self) {
-              return self.indexOf(value) === index;
-            }).length === 1);
-            done();
-          }
+
+
+      this.timeout(10000);
+      function doTest (i) {
+        var copyFileName = tmpDir + 'logo' + i + '.png';
+        var readStream = g.createReadStream({filename: '1mbBlob'});
+        var writeStream = fs.createWriteStream(copyFileName);
+        readStream.pipe(writeStream);
+        writeStream.on('close', function () {
+          checksum.file(copyFileName, function (err, sum) {
+            checksums.push(sum);
+            fs.unlinkSync(copyFileName);
+            if (++doneCounter == totalCounter) {
+              assert(checksums.filter(function (value, index, self) {
+                return self.indexOf(value) === index;
+              }).length === 1);
+              done();
+            }
+          });
         });
       }
-     });
-    })
+
+      var writeStream = g.createWriteStream({filename: '1mbBlob'});
+      fs.createReadStream(largeBlobPath).pipe(writeStream);
+      writeStream.on('close', function() {
+        for (var i = totalCounter; i-- > 0;) {
+          doTest(i);
+        }
+      });
+    });
   });
 
   after(function (done) {
-    db.dropDatabase(function () {
-      db.close(true, done);
+    fs.unlink(largeBlobPath, function (err) {
+      if (err) {
+        done(err);
+      }
+      fs.rmdir(tmpDir, function () {
+        db.dropDatabase(function () {
+          db.close(true, done);
+        });
+      });
     });
   });
 });
