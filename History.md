@@ -1,3 +1,7 @@
+0.5.2 / 2014-10-23
+==================
+
+ * fixed; multiple, multi-chunk stream support #47 [ceari](https://github.com/ceari)
 
 0.5.1 / 2014-05-14
 ==================
