@@ -1,3 +1,8 @@
+0.5.3 / 2014-10-23
+==================
+
+ * fixed; 'exist' method does not respect 'root' option #50 [nachoalthabe](https://github.com/nachoalthabe)
+
 0.5.2 / 2014-10-23
 ==================
 
