@@ -117,19 +117,13 @@ describe('test', function(){
       assert(ws.name == 'logo.png')
     })
     describe('options', function(){
-      it('should have two keys', function(){
-        assert(Object.keys(ws.options).length === 2);
-      });
-      it('limit should be Infinity', function(){
-        assert(ws.options.limit === Infinity)
+	  //Limit removed as it is not used anymore
+      it('should have one key', function(){
+        assert(Object.keys(ws.options).length === 1);
       });
     })
     it('mode should default to w', function(){
       assert(ws.mode == 'w');
-    })
-    it('should have an empty q', function(){
-      assert(Array.isArray(ws._q));
-      assert(ws._q.length === 0);
     })
     describe('store', function(){
       it('should be an instance of mongo.GridStore', function(){
@@ -203,30 +197,32 @@ describe('test', function(){
       var pipe = readStream.pipe(ws);
     });
 
-    // it('should pipe more data to an existing GridFS file', function(done){
-    //   function pipe (id, cb) {
-    //     if (!cb) cb = id, id = null;
-    //     var readStream = fs.createReadStream(txtReadPath);
-    //     var ws = g.createWriteStream({
-    //       _id: id,
-    //       mode: 'w+' });
-    //     ws.on('close', function () {
-    //       cb(ws.id);
-    //     });
-    //     readStream.pipe(ws);
-    //   }
+    //W+ not supported in new mongodb v2 gridstore driver
+    /*
+    it('should pipe more data to an existing GridFS file', function(done){
+      function pipe (id, cb) {
+        if (!cb) cb = id, id = null;
+        var readStream = fs.createReadStream(txtReadPath);
+        var ws = g.createWriteStream({
+          _id: id,
+          mode: 'w' });
+        ws.on('close', function () {
+          cb(ws.id);
+        });
+        readStream.pipe(ws);
+      }
 
-    //   pipe(function (id) {
-    //     pipe(id, function (id) {
-    //       // read the file out. it should consist of two copies of original
-    //       mongo.GridStore.read(db, id, function (err, txt) {
-    //         if (err) return done(err);
-    //         assert.equal(txt.length, fs.readFileSync(txtReadPath).length*2);
-    //         done();
-    //       });
-    //     });
-    //   })
-    // });
+      pipe(function (id) {
+        pipe(id, function (id) {
+          // read the file out. it should consist of two copies of original
+          mongo.GridStore.read(db, id, function (err, txt) {
+            if (err) return done(err);
+            assert.equal(txt.length, fs.readFileSync(txtReadPath).length*2);
+            done();
+          });
+        });
+      })
+    });*/
 
     it('should be able to store a 12-letter file name', function() {
       var ws = g.createWriteStream({ filename: '12345678.png' });
@@ -570,8 +566,8 @@ describe('test', function(){
       }, 1000);
 
       rs.on('data', function (data) {
-        done();
         rs.destroy();
+		done();
       });
     });
 
@@ -609,6 +605,41 @@ describe('test', function(){
           doTest(i);
         }
       });
+    });
+
+	it('should be able to set the encoding of a readstream', function (done) {
+      var rs = g.createReadStream({ filename: 'logo.png' });
+      rs.setEncoding('utf8');
+
+      rs.on('data', function (data) {
+		assert.equal(typeof data, 'string');
+		rs.end();
+        done();
+      });
+    });
+
+	it('should be able to pause/resume after a chunk is sent to be able to throttle the stream', function (done) {
+	  var rs = g.createReadStream({ filename: '1mbBlob' });
+	  var numChuksSent = 0
+
+      // Pause stream after one chunk has been sent
+      rs.on('data', function (data) {
+		numChuksSent += 1;
+		rs.pause();
+      });
+
+      // Only one chunk should have been sent because it was paused after that. 1mbBlob contains 5 with default gridstream chunk size
+	  setTimeout(function () {
+		assert.equal( numChuksSent, 1 );
+		rs.resume();
+      }, 500);
+
+	  // Now there should be 2
+	  setTimeout(function () {
+		assert.equal( numChuksSent, 2 );
+		done()
+      }, 1000);
+
     });
   });
 
