@@ -117,7 +117,7 @@ describe('test', function(){
       assert(ws.name == 'logo.png')
     })
     describe('options', function(){
-	  //Limit removed as it is not used anymore
+      //Limit removed as it is not used anymore
       it('should have one key', function(){
         assert(Object.keys(ws.options).length === 1);
       });
@@ -567,7 +567,7 @@ describe('test', function(){
 
       rs.on('data', function (data) {
         rs.destroy();
-		done();
+        done();
       });
     });
 
@@ -607,37 +607,37 @@ describe('test', function(){
       });
     });
 
-	it('should be able to set the encoding of a readstream', function (done) {
+    it('should be able to set the encoding of a readstream', function (done) {
       var rs = g.createReadStream({ filename: 'logo.png' });
       rs.setEncoding('utf8');
 
       rs.on('data', function (data) {
-		assert.equal(typeof data, 'string');
-		rs.end();
+        assert.equal(typeof data, 'string');
+        rs.end();
         done();
       });
     });
 
-	it('should be able to pause/resume after a chunk is sent to be able to throttle the stream', function (done) {
-	  var rs = g.createReadStream({ filename: '1mbBlob' });
-	  var numChuksSent = 0
+    it('should be able to pause/resume after a chunk is sent to be able to throttle the stream', function (done) {
+      var rs = g.createReadStream({ filename: '1mbBlob' });
+      var numChuksSent = 0
 
       // Pause stream after one chunk has been sent
       rs.on('data', function (data) {
-		numChuksSent += 1;
-		rs.pause();
+        numChuksSent += 1;
+        rs.pause();
       });
 
       // Only one chunk should have been sent because it was paused after that. 1mbBlob contains 5 with default gridstream chunk size
-	  setTimeout(function () {
-		assert.equal( numChuksSent, 1 );
-		rs.resume();
+      setTimeout(function () {
+        assert.equal( numChuksSent, 1 );
+        rs.resume();
       }, 500);
 
-	  // Now there should be 2
-	  setTimeout(function () {
-		assert.equal( numChuksSent, 2 );
-		done()
+      // Now there should be 2
+      setTimeout(function () {
+        assert.equal( numChuksSent, 2 );
+        done()
       }, 1000);
 
     });
