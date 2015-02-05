@@ -613,7 +613,7 @@ describe('test', function(){
 
       rs.on('data', function (data) {
         assert.equal(typeof data, 'string');
-        rs.end();
+        rs.destroy();
         done();
       });
     });
