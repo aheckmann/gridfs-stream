@@ -2,6 +2,12 @@
 
 Easily stream files to and from MongoDB [GridFS](http://www.mongodb.org/display/DOCS/GridFS).
 
+## Please note
+
+gridfs-stream v1.x uses node v0.10 style streams. If for some reason you need node v0.8 style streams, please switch to the [gridfs-stream 0.x branch](https://github.com/aheckmann/gridfs-stream/tree/0.x)
+
+## Description 
+
 ```js
 var mongo = require('mongodb');
 var Grid = require('gridfs-stream');
