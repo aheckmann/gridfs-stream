@@ -146,11 +146,6 @@ describe('test', function(){
           assert('function' == typeof ws.destroy)
         })
       })
-      describe('destroySoon', function(){
-        it('should be a function', function(){
-          assert('function' == typeof ws.destroySoon)
-        })
-      })
     });
     it('should provide piping from a readableStream into GridFS', function(done){
       var readStream = fs.createReadStream(imgReadPath, { bufferSize: 1024 });

@@ -12,6 +12,7 @@
     "test": "make test"
   },
   "dependencies": {
+    "flushwritable": "*",
   },
   "devDependencies": {
     "mocha": "*",
