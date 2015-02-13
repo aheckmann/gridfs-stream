@@ -4,7 +4,7 @@ Easily stream files to and from MongoDB [GridFS](http://www.mongodb.org/display/
 
 ## Please note
 
-gridfs-stream v1.x uses node v0.10 style streams. If for some reason you need node v0.8 style streams, please switch to the [gridfs-stream 0.x branch](https://github.com/aheckmann/gridfs-stream/tree/0.x)
+gridfs-stream v1.x uses node v0.10 style streams (mongodb v2.x driver). If for some reason you need node v0.8 style streams, please switch to the [gridfs-stream 0.x branch](https://github.com/aheckmann/gridfs-stream/tree/0.x)
 
 ## Description 
 
@@ -90,7 +90,7 @@ Options may contain zero or more of the following options, for more information 
 {
     _id: '50e03d29edfdc00d34000001', // a MongoDb ObjectId
     filename: 'my_file.txt', // a filename
-    mode: 'w', // default value: w+, possible options: w, w+ or r, see [GridStore](http://mongodb.github.com/node-mongodb-native/api-generated/gridstore.html)
+    mode: 'w', // default value: w
 
     //any other options from the GridStore may be passed too, e.g.:
 
