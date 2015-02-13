@@ -68,15 +68,13 @@ describe('test', function(){
         assert.equal('function', typeof g.collection);
         assert(g.collection() instanceof mongo.Collection);
         assert.equal(g.collection(), g.files);
-        var old = g.files;
-        g.collection('changed')
+        var old = g.collection();
+        g.collection('changed');
         assert(g.collection() instanceof mongo.Collection);
         assert.ok(g.collection() == g.files);
         assert.ok(g.collection() != old);
-        g.collection()
-        assert(g.collection() instanceof mongo.Collection);
         assert.equal(g.collection(), g.files);
-        assert.equal(g.collection().collectionName, old.collectionName);
+        assert.equal(g.collection().collectionName, 'changed.files');
       })
     })
   });

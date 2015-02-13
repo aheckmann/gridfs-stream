@@ -172,14 +172,12 @@ All file meta-data (file name, upload date, contentType, etc) are stored in a sp
   })
 ```
 
-You may optionally change the root gridfs collection as well:
+Alternatively you can use the ```gfs.findOne```-shorthand to find a single file
 
 ```js
-  var gfs = Grid(conn.db);
-  gfs.collection('myroot').find({ filename: 'myImage.png' }).toArray(function (err, files) {
-    if (err) ...
-    console.log(files);
-  })
+  gfs.findOne({ _id: '54da7b013706c1e7ab25f9fa'}, function (err, file) {
+    console.log(file);
+  });
 ```
 
 ## using with mongoose
