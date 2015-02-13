@@ -547,6 +547,14 @@ describe('test', function(){
       });
     });
 
+    it('should get a specific file', function(done){
+      g.findOne({ _id: id }, function(err, result) {
+        if (err) return done(err);
+        assert.ok(result);
+        done();
+      });
+    })
+
     it('should allow removing files', function(done){
       g.remove({ _id: id }, function (err) {
         if (err) return done(err);
