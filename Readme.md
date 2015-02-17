@@ -103,7 +103,15 @@ Options may contain zero or more of the following options, for more information 
 }
 ```
 
-The created File object is passed in the writeStreams `close` event.
+### Events
+
+The `writeStream` is a fully compliant [Stream2 Writable Stream](http://nodejs.org/docs/v0.10.36/api/stream.html#stream_class_stream_writable), it emits all the associated events (`drain`, `finish`, `pipe`, `unpipe`, `error`), as well as additional special events (`open`, `close`).
+
+`finish` is emitted after the file has been completely written to GridFS.
+
+`open` is emitted after the GridStore is successfully opened.
+
+`close` is emitted after the GridStore is successfully closed, which means the file is fully written to GridFS, and the file object is passed as the first argument.
 
 ```js
 writestream.on('close', function (file) {
