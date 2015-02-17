@@ -6,7 +6,7 @@ Easily stream files to and from MongoDB [GridFS](http://www.mongodb.org/display/
 
 gridfs-stream v1.x uses node v0.10 style streams (mongodb v2.x driver). If for some reason you need node v0.8 style streams, please switch to the [gridfs-stream 0.x branch](https://github.com/aheckmann/gridfs-stream/tree/0.x)
 
-## Description 
+## Description
 
 ```js
 var mongo = require('mongodb');
@@ -94,7 +94,7 @@ Options may contain zero or more of the following options, for more information 
 
     //any other options from the GridStore may be passed too, e.g.:
 
-    chunkSize: 1024, 
+    chunkSize: 1024,
     content_type: 'plain/text', // For content_type to work properly, set "mode"-option to "w" too!
     root: 'my_collection',
     metadata: {
