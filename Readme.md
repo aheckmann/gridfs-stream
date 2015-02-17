@@ -4,7 +4,7 @@ Easily stream files to and from MongoDB [GridFS](http://www.mongodb.org/display/
 
 ## Please note
 
-gridfs-stream v1.x uses node v0.10 style streams (mongodb v2.x driver). If for some reason you need node v0.8 style streams, please switch to the [gridfs-stream 0.x branch](https://github.com/aheckmann/gridfs-stream/tree/0.x)
+gridfs-stream v1.x uses [Stream2 API from nodejs v0.10](http://nodejs.org/docs/v0.10.36/api/stream.html) (and the mongodb v2.x driver). It provides more robust and easier to use streams. If for some reason you need nodejs v0.8 streams, please switch to the [gridfs-stream 0.x branch](https://github.com/aheckmann/gridfs-stream/tree/0.x)
 
 ## Description
 
