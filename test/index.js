@@ -374,6 +374,27 @@ describe('test', function(){
       });
     });
 
+    it('should emit close if open is emitted on destroy()', function(done){
+      var ws = g.createWriteStream({ filename: 'logo.png'});
+
+      var opened = false;
+      var error = false;
+      ws.on('open', function () {
+        opened = true;
+      });
+      ws.on('close', function () {
+        assert(opened);
+        assert(error);
+        done();
+      });
+
+      ws.destroy();
+
+      ws.on('error', function (err) {
+        error = true;
+      });
+    });
+
   });
 
 
