@@ -120,6 +120,14 @@ writestream.on('close', function (file) {
 });
 ```
 
+### Methods
+
+The `writeStream` has additional methods:
+
+`destroy([err])`:
+Destroy the `writeStream` as soon as possible: stop writing incoming data, close the _store. An `error` event will be emitted, as well as a `close` event.
+It's up to you to cleanup the GridStore if it's not desired to keep half written files in GridFS (the `close` event returns a GridStore `file` which can be used to delete the file, or mark it failed).
+
 ## createReadStream
 
 To stream data out of GridFS we call `createReadStream` passing any options, at least an `_id` or `filename`.
