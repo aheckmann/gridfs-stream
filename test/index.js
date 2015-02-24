@@ -342,19 +342,23 @@ describe('test', function(){
       var pipe = readStream.pipe(ws);
     });
 
-    it('should emit an error on destroy()', function(done){
+    it('should emit one error on destroy()', function(done){
       var readStream = fs.createReadStream(imgReadPath, { bufferSize: 1024 });
       var ws = g.createWriteStream({ filename: 'logo.png'});
 
       var error = new Error('test error from destroy');
+      var errorCounter = 0;
 
       ws.on('error', function (err) {
+        errorCounter += 1;
+        assert(errorCounter === 1);
         assert(err === error);
         done();
       });
 
       ws.on('progress', function (progress) {
         ws.destroy(error);
+        ws.destroy(); // test multiple destroy call
       });
 
       var pipe = readStream.pipe(ws);
