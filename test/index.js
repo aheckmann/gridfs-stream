@@ -363,6 +363,17 @@ describe('test', function(){
 
       var pipe = readStream.pipe(ws);
     });
+
+    it('should emit error on destroy() on nextTick', function(done){
+      var ws = g.createWriteStream({ filename: 'logo.png'});
+
+      ws.destroy(new Error('early destroy'));
+
+      ws.on('error', function (err) {
+        done();
+      });
+    });
+
   });
 
 
