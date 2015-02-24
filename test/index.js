@@ -341,6 +341,24 @@ describe('test', function(){
 
       var pipe = readStream.pipe(ws);
     });
+
+    it('should emit an error on destroy()', function(done){
+      var readStream = fs.createReadStream(imgReadPath, { bufferSize: 1024 });
+      var ws = g.createWriteStream({ filename: 'logo.png'});
+
+      var error = new Error('test error from destroy');
+
+      ws.on('error', function (err) {
+        assert(err === error);
+        done();
+      });
+
+      ws.on('progress', function (progress) {
+        ws.destroy(error);
+      });
+
+      var pipe = readStream.pipe(ws);
+    });
   });
 
 
