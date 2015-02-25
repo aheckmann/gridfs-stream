@@ -4,9 +4,9 @@ Easily stream files to and from MongoDB [GridFS](http://www.mongodb.org/display/
 
 ## Please note
 
-gridfs-stream v1.x uses node v0.10 style streams. If for some reason you need node v0.8 style streams, please switch to the [gridfs-stream 0.x branch](https://github.com/aheckmann/gridfs-stream/tree/0.x)
+gridfs-stream v1.x uses [Stream2 API from nodejs v0.10](http://nodejs.org/docs/v0.10.36/api/stream.html) (and the mongodb v2.x driver). It provides more robust and easier to use streams. If for some reason you need nodejs v0.8 streams, please switch to the [gridfs-stream 0.x branch](https://github.com/aheckmann/gridfs-stream/tree/0.x)
 
-## Description 
+## Description
 
 ```js
 var mongo = require('mongodb');
@@ -90,11 +90,11 @@ Options may contain zero or more of the following options, for more information 
 {
     _id: '50e03d29edfdc00d34000001', // a MongoDb ObjectId
     filename: 'my_file.txt', // a filename
-    mode: 'w', // default value: w+, possible options: w, w+ or r, see [GridStore](http://mongodb.github.com/node-mongodb-native/api-generated/gridstore.html)
+    mode: 'w', // default value: w
 
     //any other options from the GridStore may be passed too, e.g.:
 
-    chunkSize: 1024, 
+    chunkSize: 1024,
     content_type: 'plain/text', // For content_type to work properly, set "mode"-option to "w" too!
     root: 'my_collection',
     metadata: {
@@ -103,7 +103,15 @@ Options may contain zero or more of the following options, for more information 
 }
 ```
 
-The created File object is passed in the writeStreams `close` event.
+### Events
+
+The `writeStream` is a fully compliant [Stream2 Writable Stream](http://nodejs.org/docs/v0.10.36/api/stream.html#stream_class_stream_writable), it emits all the associated events (`drain`, `finish`, `pipe`, `unpipe`, `error`), as well as additional special events (`open`, `close`).
+
+`finish` is emitted after the file has been completely written to GridFS.
+
+`open` is emitted after the GridStore is successfully opened.
+
+`close` is emitted after the GridStore is successfully closed, which means the file is fully written to GridFS, and the file object is passed as the first argument.
 
 ```js
 writestream.on('close', function (file) {
@@ -111,6 +119,14 @@ writestream.on('close', function (file) {
   console.log(file.filename);
 });
 ```
+
+### Methods
+
+The `writeStream` has additional methods:
+
+`destroy([err])`:
+Destroy the `writeStream` as soon as possible: stop writing incoming data, close the _store. An `error` event will be emitted, as well as a `close` event.
+It's up to you to cleanup the GridStore if it's not desired to keep half written files in GridFS (the `close` event returns a GridStore `file` which can be used to delete the file, or mark it failed).
 
 ## createReadStream
 
