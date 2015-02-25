@@ -99,6 +99,9 @@ describe('test', function(){
     it('should be an instance of Stream', function(){
       assert(ws instanceof Stream);
     })
+    it('should be an instance of Stream.Writable', function(){
+      assert(ws instanceof Stream.Writable);
+    })
     it('should should be writable', function(){
       assert(ws.writable);
     });
@@ -115,9 +118,11 @@ describe('test', function(){
       assert(ws.name == 'logo.png')
     })
     describe('options', function(){
-      //Limit removed as it is not used anymore
       it('should have one key', function(){
         assert(Object.keys(ws.options).length === 1);
+      });
+      it('should have filename option', function(){
+        assert(ws.options.filename === 'logo.png');
       });
     })
     it('mode should default to w', function(){
@@ -144,11 +149,6 @@ describe('test', function(){
           assert('function' == typeof ws.destroy)
         })
       })
-      describe('destroySoon', function(){
-        it('should be a function', function(){
-          assert('function' == typeof ws.destroySoon)
-        })
-      })
     });
     it('should provide piping from a readableStream into GridFS', function(done){
       var readStream = fs.createReadStream(imgReadPath, { bufferSize: 1024 });
@@ -158,13 +158,31 @@ describe('test', function(){
       id = ws.id;
 
       var progress = 0;
+      var finished = false;
+      var opened = false;
+      var closed = false;
+      var file;
 
       ws.on('progress', function (size) {
         progress = size;
       });
 
-      ws.on('close', function () {
+      ws.on('open', function () {
+        opened = true;
+      });
+
+      ws.on('close', function (file_) {
+        closed = true;
+        file = file_;
+      });
+
+      ws.on('finish', function () {
+        assert(opened);
         assert(progress > 0);
+        assert(closed);
+        assert(file.filename === 'logo.png');
+        assert(file._id === id);
+        assert(file.length === fs.readFileSync(imgReadPath).length);
         done();
       });
 
@@ -195,15 +213,15 @@ describe('test', function(){
       var pipe = readStream.pipe(ws);
     });
 
+
     //W+ not supported in new mongodb v2 gridstore driver
-    /*
-    it('should pipe more data to an existing GridFS file', function(done){
+    it.skip('should pipe more data to an existing GridFS file', function(done){
       function pipe (id, cb) {
         if (!cb) cb = id, id = null;
         var readStream = fs.createReadStream(txtReadPath);
         var ws = g.createWriteStream({
           _id: id,
-          mode: 'w' });
+          mode: 'w+' });
         ws.on('close', function () {
           cb(ws.id);
         });
@@ -220,7 +238,7 @@ describe('test', function(){
           });
         });
       })
-    });*/
+    });
 
     it('should be able to store a 12-letter file name', function() {
       var ws = g.createWriteStream({ filename: '12345678.png' });
@@ -287,7 +305,96 @@ describe('test', function(){
 
       var pipe = readStream.pipe(ws);
     });
+
+    it('should emit finish after the file exists', function(done){
+      var readStream = fs.createReadStream(imgReadPath);
+      var ws = g.createWriteStream({ filename: 'logo.png'});
+
+      ws.on('finish', function () {
+        var rs = g.createReadStream({_id: id});
+        var file = fixturesDir + 'byid.png';
+        var writeStream = fs.createWriteStream(file);
+
+        rs.on('error', function (err) {
+          // should not happen
+          assert(false);
+        });
+
+        writeStream.on('finish', function () {
+          var buf1 = fs.readFileSync(imgReadPath);
+          var buf2 = fs.readFileSync(file);
+
+          assert(buf1.length === buf2.length);
+
+          for (var i = 0, len = buf1.length; i < len; ++i) {
+            assert(buf1[i] == buf2[i]);
+          }
+
+          fs.unlinkSync(file);
+          done();
+        });
+
+        rs.pipe(writeStream);
+      });
+
+      var pipe = readStream.pipe(ws);
+    });
+
+    it('should emit one error on destroy()', function(done){
+      var readStream = fs.createReadStream(imgReadPath, { bufferSize: 1024 });
+      var ws = g.createWriteStream({ filename: 'logo.png'});
+
+      var error = new Error('test error from destroy');
+      var errorCounter = 0;
+
+      ws.on('error', function (err) {
+        errorCounter += 1;
+        assert(errorCounter === 1);
+        assert(err === error);
+        done();
+      });
+
+      ws.on('progress', function (progress) {
+        ws.destroy(error);
+        ws.destroy(); // test multiple destroy call
+      });
+
+      var pipe = readStream.pipe(ws);
+    });
+
+    it('should emit error on destroy() on nextTick', function(done){
+      var ws = g.createWriteStream({ filename: 'logo.png'});
+
+      ws.destroy(new Error('early destroy'));
+
+      ws.on('error', function (err) {
+        done();
+      });
+    });
+
+    it('should emit close if open is emitted on destroy()', function(done){
+      var ws = g.createWriteStream({ filename: 'logo.png'});
+
+      var opened = false;
+      var error = false;
+      ws.on('open', function () {
+        opened = true;
+      });
+      ws.on('close', function () {
+        assert(opened);
+        assert(error);
+        done();
+      });
+
+      ws.destroy();
+
+      ws.on('error', function (err) {
+        error = true;
+      });
+    });
+
   });
+
 
   describe('createReadStream', function(){
     it('should be a function', function () {
@@ -325,7 +432,7 @@ describe('test', function(){
     describe('options', function(){
       it('should have no defaults', function(){
         // NOTE: filename is required to avoid a throw here, because you can't create a valid
-        // read stream for a non-existing file. 
+        // read stream for a non-existing file.
         assert(Object.keys(g.createReadStream({filename: 'logo.png'}).options).length === 1);
       });
     })
