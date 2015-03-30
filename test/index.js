@@ -393,6 +393,19 @@ describe('test', function(){
       });
     });
 
+    it('should create GridWriteStream without options.', function(done){
+      var ws = g.createWriteStream();
+      
+      ws.on('close', function () {
+        done();
+      });
+      
+      ws.destroy();
+      
+      ws.on('error', function (err) {
+        assert(!err);
+      });
+    });
   });
 
 
