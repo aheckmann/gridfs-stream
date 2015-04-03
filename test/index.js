@@ -76,7 +76,7 @@ describe('test', function(){
         assert.equal(g.collection(), g.files);
         assert.equal(g.collection().collectionName, 'changed.files');
       })
-    })
+    });
   });
 
   describe('createWriteStream', function(){
@@ -671,7 +671,15 @@ describe('test', function(){
         assert.ok(result);
         done();
       });
-    })
+    });
+
+    // See #72
+    it('should be able to find a file in an alternate root collection', function (done){
+      g.findOne({filename: 'alternateLogo.png', root: 'alternate' }, function (err, file) {
+        assert.equal(err, null);
+        done();
+      });
+    });
 
     it('should allow removing files', function(done){
       g.remove({ _id: id }, function (err) {
