@@ -1,3 +1,24 @@
+1.1.1 / 2015-04-03
+==================
+
+ * fixed; Not working with Mongoose 4.0.1 / Mongo JS 2.0 #72
+ * fixed; Fix a bug of GridWriteStream constructor #71 [pine613](https://github.com/pine613)
+
+1.1.0 / 2015-02-15
+==================
+
+ * fixed; Patch stream2 writable v2 #67 [triccardi-systran](https://github.com/triccardi-systran)
+
+1.0.1 / 2015-02-15
+==================
+
+ * fixed; Add findOne function and fix Grid.collection not reflecting name #64 [healiha](https://github.com/healiha)
+
+1.0.0 / 2015-02-11
+==================
+
+ * first version working with mongodb 2.x driver [riaan53](https://github.com/riaan53)
+
 0.5.3 / 2014-10-23
 ==================
 
