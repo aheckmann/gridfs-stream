@@ -2,7 +2,7 @@
 ==================
 
  * fixed; Not working with Mongoose 4.0.1 / Mongo JS 2.0 #72
- * fixed; Fix a bug of GridWriteStream constructor #71 [pine613](https://github.com/pine613)
+ * fixed; Fix a bug of GridWriteStream constructor #71 [pine](https://github.com/pine)
 
 1.1.0 / 2015-02-15
 ==================
