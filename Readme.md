@@ -195,6 +195,15 @@ Alternatively you can use the ```gfs.findOne```-shorthand to find a single file
     console.log(file);
   });
 ```
+## working with collection
+
+If no collection name is specified, the default root mongodb gridfs collection `fs` will be used.
+
+Use method `collection()` to change the default collection to `custom-collection-name`
+
+```
+gfs.collection('custom-collection-name');
+```
 
 ## using with mongoose
 
