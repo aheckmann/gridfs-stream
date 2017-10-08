@@ -201,7 +201,7 @@ If no collection name is specified, the default root mongodb gridfs collection `
 
 Use method `collection()` to change the default collection to `custom-collection-name`
 
-```
+```js
 gfs.collection('custom-collection-name');
 ```
 
