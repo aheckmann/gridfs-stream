@@ -155,7 +155,7 @@ var readstream = gfs.createReadStream({
 Files can be removed by passing options (at least an `_id` or `filename`) to the `remove()` method.
 
 ```js
-gfs.remove(options, function (err) {
+gfs.remove(options, function (err, gridStore) {
   if (err) return handleError(err);
   console.log('success');
 });
