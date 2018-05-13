@@ -4,6 +4,7 @@ var assert = require('assert')
   , Stream = require('stream')
   , fs = require('fs')
   , mongo = require('mongodb')
+  , MongoClient = mongo.MongoClient
   , Grid = require('../')
   , crypto = require('crypto')
   , checksum = require('checksum')
@@ -13,15 +14,15 @@ var assert = require('assert')
   , txtReadPath =fixturesDir + 'text.txt'
   , emptyReadPath = fixturesDir + 'emptydoc.txt'
   , largeBlobPath = tmpDir + '1mbBlob'
-  , server
+  , url = 'mongodb://localhost:27017'
+  , dbName = 'gridstream_test'
+  , client
   , db
 
 
 describe('test', function(){
   var id;
   before(function (done) {
-    server = new mongo.Server('localhost', 27017);
-    db = new mongo.Db('gridstream_test', server, {w:1});
     if (!fs.existsSync(tmpDir)) {
       fs.mkdirSync(tmpDir);
     }
@@ -29,7 +30,11 @@ describe('test', function(){
       if (err) {
         done(err);
       }
-      db.open(done)
+      MongoClient.connect(url, { useNewUrlParser: true }, function(err, _client) {
+        client = _client;
+        db = _client.db(dbName);
+        done(err);
+      });
     });
   });
 
@@ -784,7 +789,7 @@ describe('test', function(){
       }
       fs.rmdir(tmpDir, function () {
         db.dropDatabase(function () {
-          db.close(true, done);
+          client.close(true, done);
         });
       });
     });
