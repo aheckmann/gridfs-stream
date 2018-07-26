@@ -1,8 +1,9 @@
 {
-  "author": "Aaron Heckmann <aaron.heckmann+github@gmail.com>",
-  "name": "gridfs-stream",
+  "author": "Lally Elias <lallyelias87@gmail.com>",
+  "name": "@lykmapipo/gridfs-stream",
   "description": "Writable/Readable Nodejs compatible GridFS streams",
-  "version": "1.1.1",
+  "version": "1.2.0",
+  "license": "MIT",
   "keywords": [
     "mongodb",
     "mongoose",
@@ -16,7 +17,7 @@
   },
   "devDependencies": {
     "mocha": "*",
-    "mongodb": "2.0.15",
+    "mongodb": "3.1.1",
     "checksum": "~0.1.1"
   },
   "optionalDependencies": {},
@@ -25,6 +26,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/aheckmann/gridfs-stream.git"
+    "url": "git://github.com/lykmapipo/gridfs-stream.git"
   }
 }
