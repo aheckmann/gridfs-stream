@@ -9,19 +9,20 @@
     "gridfs"
   ],
   "scripts": {
-    "test": "make test"
+    "test": "mocha --exit"
   },
   "dependencies": {
-    "flushwritable": "^1.0.0"
+    "flushwritable": "latest"
   },
   "devDependencies": {
-    "mocha": "*",
-    "mongodb": "2.0.15",
-    "checksum": "~0.1.1"
+    "checksum": "latest",
+    "mocha": "latest",
+    "mongoose": "latest",
+    "npm-check-updates": "latest"
   },
   "optionalDependencies": {},
   "engines": {
-    "node": ">= 0.4.2"
+    "node": "latest"
   },
   "repository": {
     "type": "git",
