@@ -50,6 +50,7 @@ describe('test', function () {
       assert.equal(x.db, 4);
       assert.equal(x.mongo, 5);
     });
+     // I think it does not throw since it uses a different gridstore with mongoose driver. (I'M VERY UNSURE ABOUT THIS.)
     it('should require mongo argument', function () {
       assert.throws(function () {
         new Grid(3)

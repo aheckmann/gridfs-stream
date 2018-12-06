@@ -17,6 +17,7 @@
   "devDependencies": {
     "checksum": "latest",
     "mocha": "latest",
+    "mongodb": "^2.1.33",
     "mongoose": "latest",
     "npm-check-updates": "latest"
   },
